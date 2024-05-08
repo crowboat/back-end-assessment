@@ -25,7 +25,8 @@ app.get('/:columnName/histogram', (req, res) => {
     ColumnName[req.params.columnName.toString() as keyof typeof ColumnName];
 
   // Construct the SQL query to get histogram data for the specified column
-  const sql = `SELECT $columnName as columnValue, COUNT(*) AS count FROM crop_harvest_plant_history GROUP BY $columnName`;
+  const sql = `SELECT ${columnName} AS columnValue, COUNT(*) AS count FROM crop_harvest_plant_history GROUP BY ${columnName}`;
+
 
   // Prepare HTML response
   let htmlResponse = '<h1>Histogram</h1>';
@@ -34,13 +35,13 @@ app.get('/:columnName/histogram', (req, res) => {
   // Execute the query for each row individually
   db.each(
     sql,
-    { $columnName: columnName },
+    {},
     (err: Error, row: Row) => {
       if (err) {
         res.status(500).send(err.message);
         return;
       }
-      if (row.columnValue === columnName) return;
+    //   if (row.columnValue === columnName) return;
       // Add row data to the HTML response
       htmlResponse += `<tr><td>${row.columnValue}</td><td>${row.count}</td></tr>`;
     },
