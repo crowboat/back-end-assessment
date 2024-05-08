@@ -12,44 +12,47 @@ enum ColumnName {
 }
 
 interface Row {
-  [columnName: string]: ColumnName | number;
+  columnValue: ColumnName;
   count: number;
 }
 
 const app = express();
 const dbPath = __dirname + '/db/Projection2021.db';
-// const tableName: string = 'crop_harvest_plant_history';
 const db: Database = new sqlite3.Database(dbPath);
 
 app.get('/:columnName/histogram', (req, res) => {
-    const columnName = req.params.columnName.toString();
+  const columnName =
+    ColumnName[req.params.columnName.toString() as keyof typeof ColumnName];
 
-    // Construct the SQL query to get histogram data for the specified column
-    const sql = `SELECT ${columnName}, COUNT(*) AS count FROM crop_harvest_plant_history GROUP BY ${columnName}`;
+  // Construct the SQL query to get histogram data for the specified column
+  const sql = `SELECT $columnName as columnValue, COUNT(*) AS count FROM crop_harvest_plant_history GROUP BY $columnName`;
 
-    // Prepare HTML response
-    let htmlResponse = '<h1>Histogram</h1>';
-    htmlResponse += `<table border="1"><tr><th>${columnName}</th><th>Count</th></tr>`;
+  // Prepare HTML response
+  let htmlResponse = '<h1>Histogram</h1>';
+  htmlResponse += `<table border="1"><tr><th>${columnName}</th><th>Count</th></tr>`;
 
-    // Execute the query and process each row individually
-    db.each(sql, [], (err: Error, row: Row) => {
-        if (err) {
-            res.status(500).send(err.message);
-            return;
-        }
-        if (row[columnName] === columnName) return;
-        // Add row data to the HTML response
-        htmlResponse += `<tr><td>${row[columnName]}</td><td>${row.count}</td></tr>`;
-    }, () => {
-        // After all rows have been processed, close the HTML table and send the response
-        htmlResponse += '</table>';
-        res.send(htmlResponse);
-    });
+  // Execute the query for each row individually
+  db.each(
+    sql,
+    { $columnName: columnName },
+    (err: Error, row: Row) => {
+      if (err) {
+        res.status(500).send(err.message);
+        return;
+      }
+      if (row.columnValue === columnName) return;
+      // Add row data to the HTML response
+      htmlResponse += `<tr><td>${row.columnValue}</td><td>${row.count}</td></tr>`;
+    },
+    () => {
+      // After all rows have been processed, close the HTML table and send the response
+      htmlResponse += '</table>';
+      res.send(htmlResponse);
+    }
+  );
 });
 
 // Start the server
 app.listen(4000, () => {
   console.log(`Server is running!`);
 });
-
-// // console.dir(await db.que/ry("SELECT name FROM sqlite_schema WHERE type='table' ORDER BY name;"));
