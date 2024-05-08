@@ -10,5 +10,4 @@ CREATE TABLE IF NOT EXISTS crop_harvest_plant_history (
     Value INTEGER
 );
 
--- Import data from CSV into the table
 .import /home/node/app/build/db/csv/Projection2021.csv crop_harvest_plant_history
