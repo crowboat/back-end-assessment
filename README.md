@@ -1,3 +1,8 @@
+# To Run
+1. From root where Dockerfile is run `docker compose build`
+2. After build completes, run `docker compose up`
+3. Navigate to a route, http://localhost:4000/Commodity/histogram
+
 # Back-end Developer Interview
 
 ## Expectations:

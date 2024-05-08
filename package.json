@@ -1,0 +1,27 @@
+{
+  "name": "back-end-interview",
+  "version": "1.0.0",
+  "description": "## Expectations:",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_PATH=./build node build/index.js",
+    "build": "rm -rf build && tsc -p .",
+    "dev": "nodemon src/index.ts",
+    "sequelize": "node_modules/.bin/sequelize"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/sqlite3": "^3.1.11", 
+    "@types/express": "^4.17.21",
+    "@types/sequelize": "^4.28.20",
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "sequelize-typescript": "^2.1.6",
+    "sqlite3": "^5.1.7"
+  }
+}

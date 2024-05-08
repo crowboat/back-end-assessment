@@ -1,0 +1,16 @@
+services:
+  back-end-ts-node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - ./src:/home/node/app/src
+      - ./nodemon.json:/home/node/app/nodemon.json
+    working_dir: /home/node/app/src   
+    container_name: back-end-ts-node
+    expose:
+      - '4000'
+    ports:
+      - '4000:4000'
+    command: npm run start
