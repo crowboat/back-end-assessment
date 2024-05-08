@@ -41,7 +41,7 @@ app.get('/:columnName/histogram', (req, res) => {
         res.status(500).send(err.message);
         return;
       }
-    //   if (row.columnValue === columnName) return;
+      if (row.columnValue === columnName) return;
       // Add row data to the HTML response
       htmlResponse += `<tr><td>${row.columnValue}</td><td>${row.count}</td></tr>`;
     },
